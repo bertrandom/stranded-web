@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Johnny Castaway, full width</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f4efe4;
+      color: #2b2a26;
+      font: 17px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    /* As wide as the window and as tall, but never wider than 4:1, where
+       the picture can't widen any further. The player fills the rest by
+       extending the ocean and sky */
+    #johnny {
+      width: 100%;
+      height: max(100svh, 25vw);
+    }
+
+    /* On a window narrower than 4:3, keep Johnny's 4:3 */
+    @media (max-aspect-ratio: 4/3) {
+      #johnny { height: auto; aspect-ratio: 4 / 3; }
+    }
+
+    .title {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      margin: 0;
+      color: #fff;
+      font-size: 20px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+      pointer-events: none;
+    }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 20px;
+    }
+  </style>
+</head>
+<body>
+  <header id="johnny">
+    <h1 class="title">Johnny Castaway</h1>
+  </header>
+
+  <main>
+    <p>The player spans the width of the window. On a window wider than 4:3, the open ocean scenes widen to fill it, as stranded does on a widescreen TV, and the other scenes get black sides.</p>
+    <p>The picture follows the window's shape from one round of scenes to the next. Until then, it's scaled to cover the player.</p>
+  </main>
+
+  <script type="module">
+    import { createPlayer } from '../../src/index.ts';
+
+    createPlayer(document.getElementById('johnny'), {
+      data: '/data/',
+      shape: 'fill',
+      onNowPlaying: np => console.log('Now playing:', np.title || np.activity),
+    });
+  </script>
+</body>
+</html>

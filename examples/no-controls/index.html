@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Johnny Castaway, no controls</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+    }
+
+    /* The whole window, like a screen saver */
+    #johnny {
+      position: fixed;
+      inset: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="johnny"></div>
+
+  <script type="module">
+    import { createPlayer } from '../../src/index.ts';
+
+    createPlayer(document.getElementById('johnny'), {
+      data: '/data/',
+      controls: false,
+      keyboard: false,
+    });
+  </script>
+</body>
+</html>

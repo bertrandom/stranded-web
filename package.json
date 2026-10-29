@@ -1,15 +1,27 @@
 {
   "name": "stranded-web",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Johnny Castaway in the browser: a TypeScript port of stranded, and the landing page for stranded-pi",
+  "description": "Johnny Castaway, the 1992 screen saver, on a web page: a TypeScript port of stranded",
   "license": "GPL-3.0-or-later",
+  "repository": "github:bertrandom/stranded-web",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/stranded.js"
+    }
+  },
+  "bin": {
+    "stranded-extract": "./dist/bin/extract.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "extract": "tsx scripts/extract.ts",
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
+    "build": "tsc --noEmit && vite build && tsc -p tsconfig.build.json && tsc -p tsconfig.extract.json && chmod +x dist/bin/extract.js",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // Converts the original game's data files (RESOURCE.MAP, RESOURCE.001 and
 // the sounds) into what the web engine loads:
 //
@@ -10,7 +11,8 @@
 // The PNGs are 4-bit, using the game's 16-color palette, so they hold the
 // original pixels exactly. Ported from stranded's resource.c and uncompress.c
 //
-//   npm run extract -- <directory with RESOURCE.MAP> [output directory]
+//   stranded-extract <directory with RESOURCE.MAP> [output directory]
+//   (or npm run extract -- ..., in this repository)
 
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -289,7 +291,7 @@ function main() {
     const [srcDir, outDir = 'public/data'] = process.argv.slice(2);
 
     if (!srcDir) {
-        console.error('Usage: npm run extract -- <directory with RESOURCE.MAP> [output directory]');
+        console.error('Usage: stranded-extract <directory with RESOURCE.MAP> [output directory]');
         process.exit(1);
     }
 

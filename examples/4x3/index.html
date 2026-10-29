@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Johnny Castaway, 4:3</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #fff;
+    }
+
+    /* The page sizes the player: here, the original 640x480, or less on a
+       narrow window */
+    #johnny {
+      width: min(640px, 100vw);
+      aspect-ratio: 4 / 3;
+    }
+  </style>
+</head>
+<body>
+  <div id="johnny"></div>
+
+  <script type="module">
+    import { createPlayer } from '../../src/index.ts';
+
+    createPlayer(document.getElementById('johnny'), {
+      data: '/data/',
+      shape: '4:3',
+    });
+  </script>
+</body>
+</html>
