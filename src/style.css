@@ -1,0 +1,466 @@
+:root {
+  --bg: #f4efe4;
+  --card: #fffdf8;
+  --text: #2b2a26;
+  --muted: #6f6a5f;
+  --border: #e2dac8;
+  --accent: #1f7a8c;
+  --accent-text: #ffffff;
+  --code-bg: #efe8d8;
+  --ocean: #0b1d33;
+  --overlay-text: #ffffff;
+  --overlay-muted: rgba(255, 255, 255, .78);
+  --pixel: "Silkscreen", ui-monospace, monospace;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181c;
+    --card: #20232a;
+    --text: #ece9e1;
+    --muted: #9b978d;
+    --border: #333741;
+    --accent: #4fb3c8;
+    --accent-text: #0e1114;
+    --code-bg: #191b20;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #16181c;
+  --card: #20232a;
+  --text: #ece9e1;
+  --muted: #9b978d;
+  --border: #333741;
+  --accent: #4fb3c8;
+  --accent-text: #0e1114;
+  --code-bg: #191b20;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); }
+
+code, pre, kbd { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .88em; }
+
+
+/* The hero: Johnny, across the whole width of the window */
+
+.hero {
+  position: relative;
+  width: 100%;
+  /* As tall as the window, but never wider than 4:1, where the picture
+     can't widen any further */
+  height: max(100svh, 25vw);
+  min-height: 420px;
+  background: var(--ocean);
+  color: var(--overlay-text);
+  overflow: hidden;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  outline: none;
+}
+
+#screen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #000;
+}
+
+.loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--pixel);
+  font-size: 15px;
+  letter-spacing: .04em;
+  background: var(--ocean);
+  transition: opacity .6s;
+}
+
+.loading.done { opacity: 0; pointer-events: none; }
+
+.loading-dot {
+  width: 10px;
+  height: 10px;
+  background: #00a8a8;
+  animation: bob 1.2s ease-in-out infinite;
+}
+
+@keyframes bob { 50% { transform: translateY(-6px); } }
+
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: max(16px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) 32px max(24px, env(safe-area-inset-left));
+  background: linear-gradient(rgba(0, 0, 0, .45), transparent);
+}
+
+.brand {
+  font-family: var(--pixel);
+  font-size: 22px;
+  color: inherit;
+  text-decoration: none;
+  letter-spacing: .02em;
+}
+
+.brand.small { font-size: 16px; }
+
+.topbar nav { display: flex; gap: 20px; }
+
+.topbar nav a {
+  color: var(--overlay-text);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  opacity: .9;
+}
+
+.topbar nav a:hover { opacity: 1; text-decoration: underline; }
+
+.playbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 48px max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+  background: linear-gradient(transparent, rgba(0, 0, 0, .55));
+  pointer-events: none;
+}
+
+.playbar > * { pointer-events: auto; }
+
+.now-playing {
+  margin: 0;
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: .04em;
+  color: var(--overlay-muted);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+  min-height: 1em;
+  margin-left: auto;
+  text-align: right;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, .45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.controls button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--overlay-text);
+  cursor: pointer;
+}
+
+.controls button:hover { background: rgba(255, 255, 255, .14); }
+.controls button:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
+
+.controls svg { width: 22px; height: 22px; fill: currentColor; }
+
+.icon-play, .icon-sound-on { display: none; }
+#pause[aria-pressed="true"] .icon-play,
+#sound[aria-pressed="true"] .icon-sound-on { display: block; }
+#pause[aria-pressed="true"] .icon-pause,
+#sound[aria-pressed="true"] .icon-sound-off { display: none; }
+
+.day {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px 0 10px;
+  font-family: var(--pixel);
+  font-size: 12px;
+  color: var(--overlay-muted);
+}
+
+.day select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 6px;
+  background: rgba(255, 255, 255, .14);
+  color: var(--overlay-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.day select option { color: #000; }
+
+/* The pitch, over the ocean on wide windows */
+
+.pitch {
+  position: absolute;
+  left: max(24px, env(safe-area-inset-left));
+  bottom: 96px;
+  max-width: 480px;
+  padding: 24px 26px 26px;
+  border-radius: 16px;
+  background: rgba(8, 20, 38, .72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .25);
+  transition: opacity .8s, transform .8s;
+}
+
+.pitch h1 {
+  margin: 0 0 10px;
+  font-size: clamp(26px, 2.6vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -.01em;
+}
+
+.pitch p {
+  margin: 0 0 18px;
+  color: var(--overlay-muted);
+  font-size: 16px;
+}
+
+/* Out of the way once Johnny's been watched for a while; back on a move */
+.hero.idle .pitch { opacity: 0; transform: translateY(12px); pointer-events: none; }
+.hero.idle .topbar, .hero.idle .playbar { opacity: 0; }
+.topbar, .playbar { transition: opacity .8s; }
+
+.button {
+  display: inline-block;
+  padding: 11px 18px;
+  border-radius: 10px;
+  background: #00a8a8;
+  color: #04161a;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.button:hover { background: #18c4c4; }
+
+.stage:fullscreen .topbar { display: none; }
+
+/* On narrow windows, Johnny keeps his 4:3 and the pitch goes below */
+@media (max-aspect-ratio: 4/3) {
+  .hero {
+    height: auto;
+    min-height: 0;
+  }
+
+  .stage {
+    position: relative;
+    aspect-ratio: 4 / 3;
+  }
+
+  .stage:fullscreen { aspect-ratio: auto; }
+
+  .pitch {
+    position: static;
+    max-width: none;
+    border-radius: 0;
+    background: var(--ocean);
+    box-shadow: none;
+    padding: 24px 16px 32px;
+  }
+
+  .hero.idle .pitch { opacity: 1; transform: none; pointer-events: auto; }
+
+  .topbar { padding: 12px 16px 24px; }
+  .topbar nav { gap: 14px; }
+  .topbar nav a { font-size: 14px; }
+  .playbar { padding: 32px 10px 10px; }
+  .now-playing { display: none; }
+  .controls { margin-left: auto; }
+}
+
+@media (max-width: 480px) {
+  .topbar nav a:not(:last-child) { display: none; }
+  .controls button { width: 36px; height: 36px; }
+}
+
+
+/* The page */
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section { padding: 88px 0; }
+.section + .section { border-top: 1px solid var(--border); }
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: .06em;
+  color: var(--accent);
+  text-transform: lowercase;
+}
+
+h2 {
+  margin: 0 0 16px;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -.015em;
+  max-width: 22ch;
+}
+
+h3 { margin: 0 0 6px; font-size: 18px; }
+h4 { margin: 22px 0 6px; font-size: 15px; }
+
+.lead {
+  max-width: 62ch;
+  font-size: 19px;
+  color: var(--muted);
+  margin: 0 0 48px;
+}
+
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 16px;
+}
+
+.features li {
+  padding: 22px 22px 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.features p { margin: 0; color: var(--muted); font-size: 15.5px; }
+
+.paths {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.card {
+  min-width: 0;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.card p, .card li { color: var(--muted); font-size: 15.5px; }
+.card b { color: var(--text); font-weight: 600; }
+.card ol { padding-left: 20px; }
+.card ol li { margin-bottom: 6px; }
+
+pre {
+  margin: 14px 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+:not(pre) > code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--code-bg);
+}
+
+.checklist { padding-left: 20px; margin: 0; }
+
+.more { margin: 28px 0 0; color: var(--muted); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 8px 40px;
+}
+
+.about-grid p { margin: 0 0 16px; color: var(--muted); }
+
+.keys { margin: 24px 0 0; color: var(--muted); font-size: 15px; }
+
+kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--card);
+}
+
+.footer {
+  padding: 28px 0 40px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+}
+
+.footer .brand { color: var(--text); }
+.footer .links { display: flex; gap: 16px; margin-left: auto; }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 16px; }
+  .section { padding: 56px 0; }
+  .lead { font-size: 17px; margin-bottom: 32px; }
+  .paths { grid-template-columns: 1fr; }
+  .card { padding: 20px; }
+  .footer .links { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .loading-dot { animation: none; }
+}

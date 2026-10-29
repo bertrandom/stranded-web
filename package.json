@@ -1,0 +1,21 @@
+{
+  "name": "stranded-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Johnny Castaway in the browser: a TypeScript port of stranded, and the landing page for stranded-pi",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "extract": "tsx scripts/extract.ts",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.5"
+  }
+}

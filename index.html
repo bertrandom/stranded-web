@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Stranded: Johnny Castaway, live</title>
+  <meta name="description" content="Johnny Castaway, the 1992 Sierra screen saver, playing live in your browser. Put him on a Raspberry Pi with stranded-pi and he'll live on your wall.">
+  <meta name="theme-color" content="#0b1d33">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2300a8a8'/%3E%3Cellipse cx='16' cy='24' rx='12' ry='4' fill='%23a8a800'/%3E%3Cpath d='M17 23c0-6 1-10 4-14' stroke='%23542' stroke-width='2' fill='none'/%3E%3Cpath d='M21 9c-4-2-8 0-10 3M21 9c4-2 7 0 8 3M21 9c0-3-3-5-6-5' stroke='%2300a800' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+<header class="hero" id="johnny">
+  <div class="stage" tabindex="0" aria-label="Johnny Castaway, playing live. Space pauses, N skips to the next scene.">
+    <canvas id="screen" width="640" height="480"></canvas>
+
+    <div class="loading" id="loading">
+      <span class="loading-dot"></span> Rowing out to the island…
+    </div>
+
+    <div class="topbar">
+      <a class="brand" href="#johnny">Stranded</a>
+      <nav>
+        <a href="#pi">Raspberry Pi</a>
+        <a href="#about">About</a>
+        <a href="https://github.com/bertrandom/stranded-pi">GitHub</a>
+      </nav>
+    </div>
+
+    <div class="playbar">
+      <p class="now-playing" id="now-playing" aria-live="polite"></p>
+      <div class="controls">
+        <label class="day" title="Day of the story">
+          Day
+          <select id="day" aria-label="Day of the story"></select>
+          <span class="of">/ 11</span>
+        </label>
+        <button type="button" id="pause" title="Pause (Space)" aria-label="Pause">
+          <svg viewBox="0 0 24 24" class="icon-pause"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg>
+          <svg viewBox="0 0 24 24" class="icon-play"><path d="M8 5l11 7-11 7z"/></svg>
+        </button>
+        <button type="button" id="next" title="Next scene (N)" aria-label="Next scene">
+          <svg viewBox="0 0 24 24"><path d="M6 5l9 7-9 7zM16 5h3v14h-3z"/></svg>
+        </button>
+        <button type="button" id="sound" title="Sound" aria-label="Turn sound on" aria-pressed="false">
+          <svg viewBox="0 0 24 24" class="icon-sound-off"><path d="M4 9h4l5-4v14l-5-4H4zM16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="currentColor" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 24 24" class="icon-sound-on"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" id="fullscreen" title="Full screen (F)" aria-label="Full screen">
+          <svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pitch" id="pitch">
+    <h1>Johnny Castaway is still&nbsp;stranded.</h1>
+    <p>Sierra's 1992 screen saver, playing live right here: same island, same story, a new day of it every day. Put him on a Raspberry Pi and he'll live on your wall.</p>
+    <a class="button" href="#pi">Make a Johnny screen</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="section intro" id="pi">
+    <div class="wrap">
+      <p class="eyebrow">stranded-pi</p>
+      <h2>A Raspberry Pi that does one thing: keep Johnny company.</h2>
+      <p class="lead">stranded-pi turns a Raspberry Pi into a dedicated Johnny Castaway screen. Plug it into a TV or a spare monitor and it plays full screen from the moment it boots, with no desktop, mouse or keyboard. A web page on your network lets you run it from your phone.</p>
+
+      <ul class="features">
+        <li>
+          <h3>The whole story</h3>
+          <p>Fishing, building the raft, Mary, Suzy, the Lilliputians: every scene of the original, picked the way it picked them. The story moves on a day at a time, over eleven days.</p>
+        </li>
+        <li>
+          <h3>Made for widescreen</h3>
+          <p>Nothing gets stretched. On a 16:9 TV, the ocean and sky carry on to the edges of the screen, and clouds, boats and Johnny go there too.</p>
+        </li>
+        <li>
+          <h3>Sleeps at night</h3>
+          <p>Night mode pauses Johnny and turns the display off between the hours you pick. It can put a TV in standby over HDMI-CEC, and wakes everything in the morning.</p>
+        </li>
+        <li>
+          <h3>A remote in your pocket</h3>
+          <p>Open the Pi's address in a browser for a live preview, play and pause, skipping scenes, the night schedule and settings. There's a JSON API too.</p>
+        </li>
+        <li>
+          <h3>Keeps itself current</h3>
+          <p>Updates to the latest stranded release with one tap on the web page. Reboot and shut down from there too.</p>
+        </li>
+        <li>
+          <h3>Light on hardware</h3>
+          <p>No desktop underneath: it draws straight to the screen through KMS/DRM, on anything from a Pi Zero 2 W to a Pi 5.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section setup" id="setup">
+    <div class="wrap">
+      <p class="eyebrow">Set one up</p>
+      <h2>Two ways to get Johnny onto a Pi.</h2>
+
+      <div class="paths">
+        <article class="card">
+          <h3>Flash a ready-made SD card</h3>
+          <p>The image is Raspberry Pi OS Lite (64-bit) with stranded preinstalled. Build it with Docker, on a Mac with Apple Silicon or any machine that has it:</p>
+          <pre><code>git clone https://github.com/bertrandom/stranded-pi
+cd stranded-pi
+./image/build-docker.sh</code></pre>
+          <ol>
+            <li>In <a href="https://www.raspberrypi.com/software/">Raspberry Pi Imager</a>, open <b>App Options</b> and set <b>Content Repository</b> to the <code>repo.json</code> in <code>image/out</code>.</li>
+            <li>Choose your Pi, then <b>Stranded</b> as the operating system, and your SD card.</li>
+            <li>Set the hostname, Wi-Fi and a password, and write the card.</li>
+          </ol>
+          <p>On first boot, the Pi applies your settings and starts Johnny. His web page is at <code>http://&lt;hostname&gt;/</code>.</p>
+        </article>
+
+        <article class="card">
+          <h3>Or set up a Pi you already have</h3>
+          <p>On a Pi running Raspberry Pi OS Lite (64-bit) Trixie, copy over the setup script and run it:</p>
+          <pre><code>scp setup.sh &lt;your Pi&gt;:
+ssh &lt;your Pi&gt; sudo ./setup.sh</code></pre>
+          <p>It installs the latest stranded release, fetches the game's data files, writes the default settings and starts Johnny. Run it again any time to update. It keeps your settings.</p>
+          <h4>What you need</h4>
+          <ul class="checklist">
+            <li>A Raspberry Pi Zero 2 W, 3, 4 or 5</li>
+            <li>A microSD card and a power supply</li>
+            <li>A screen with HDMI: a TV, a monitor, a little display</li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="more">The full details, including the API, are in the <a href="https://github.com/bertrandom/stranded-pi#readme">stranded-pi README</a>.</p>
+    </div>
+  </section>
+
+  <section class="section about" id="about">
+    <div class="wrap">
+      <p class="eyebrow">About</p>
+      <h2>An island, kept afloat.</h2>
+      <div class="about-grid">
+        <p>Johnny Castaway was made by Dynamix and published by Sierra in 1992, as a screen saver for Windows 3.1 that told a story over weeks. What plays here is <a href="https://github.com/bertrandom/stranded">stranded</a>, built on Jérémie Guillaume's open source engine <a href="https://github.com/jno6809/jc_reborn">Johnny Reborn</a>. It was ported to TypeScript for this page, which draws every frame on a canvas from the original game's data.</p>
+        <p>Thanks to Hans Milling for <a href="https://github.com/nivs1978/Johnny-Castaway-Open-Source">Johnny Castaway Open Source</a>, to Alexandre Fontoura for <a href="https://github.com/xesf/castaway">castaway</a>, and to everyone who worked out how the original works. Johnny Castaway belongs to its rights holders. This is a fan project, with no ties to them.</p>
+      </div>
+      <p class="keys"><b>Keys</b>, with the picture selected: <kbd>Space</kbd> pause · <kbd>Return</kbd> step a frame while paused · <kbd>N</kbd> next scene · <kbd>M</kbd> max speed · <kbd>F</kbd> full screen</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span class="brand small">Stranded</span>
+    <span>Free software under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL v3</a>.</span>
+    <span class="links">
+      <a href="https://github.com/bertrandom/stranded">stranded</a>
+      <a href="https://github.com/bertrandom/stranded-pi">stranded-pi</a>
+      <a href="https://github.com/bertrandom/stranded-web">stranded-web</a>
+    </span>
+  </div>
+</footer>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
