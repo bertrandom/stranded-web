@@ -1,5 +1,27 @@
 # stranded-web
 
+```mermaid
+flowchart LR
+    stranded["<b>stranded</b><br>the C engine, as a Debian package"]
+    pi["<b>stranded-pi</b><br>an SD card image for the Raspberry Pi"]
+    web["<b>stranded-web</b><br>a TypeScript port for web pages"]
+    site["<b>stranded.bert.org</b><br>the landing page"]
+
+    stranded -- "Debian package" --> pi
+    stranded -- "ported to TypeScript" --> web
+    pi -- "image to download" --> site
+    web -- "Johnny playing live" --> site
+
+    click stranded href "https://github.com/bertrandom/stranded" _blank
+    click pi href "https://github.com/bertrandom/stranded-pi" _blank
+    click web href "https://github.com/bertrandom/stranded-web" _blank
+    click site href "https://github.com/bertrandom/stranded.bert.org" _blank
+
+    style web stroke-width:4px
+```
+
+[stranded](https://github.com/bertrandom/stranded) · [stranded-pi](https://github.com/bertrandom/stranded-pi) · [stranded-web](https://github.com/bertrandom/stranded-web) · [stranded.bert.org](https://github.com/bertrandom/stranded.bert.org)
+
 Johnny Castaway, the 1992 screen saver, on a web page.
 
 It's a TypeScript port of [stranded](https://github.com/bertrandom/stranded)'s engine, itself a fork of Jérémie Guillaume's [Johnny Reborn](https://github.com/jno6809/jc_reborn), drawing on a `<canvas>`. Like stranded on a widescreen display, it can widen the picture to fill its space: the open ocean scenes extend their ocean and sky to the edges. [stranded.bert.org](https://stranded.bert.org) uses it.
