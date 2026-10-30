@@ -15,6 +15,8 @@ export interface EngineOptions {
     // The shape of the display, to widen the picture to; checked between
     // scenes
     aspect: () => { width: number; height: number };
+    // Play the title screen first
+    intro?: boolean;
     onNowPlaying?: (np: NowPlaying) => void;
 }
 
@@ -41,7 +43,7 @@ export async function startEngine(options: EngineOptions) {
 
     eventsInit();
 
-    storyPlay().catch(e => console.error('Johnny stopped:', e));
+    storyPlay(options.intro ?? true).catch(e => console.error('Johnny stopped:', e));
 }
 
 

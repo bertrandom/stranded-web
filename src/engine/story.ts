@@ -167,10 +167,13 @@ async function playScene(scene: StoryScene) {
 }
 
 
-export async function storyPlay() {
+// With intro false, straight to the island, without the title screen
+export async function storyPlay(intro = true) {
     adsInit();
     storyUpdateCurrentDay();    // so that the day is known during the intro
-    await adsPlayIntro();
+
+    if (intro)
+        await adsPlayIntro();
 
     while (true) {
         storyHooks.beforeScene();

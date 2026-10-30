@@ -15,6 +15,10 @@ export interface PlayerOptions {
     // edges. '4:3' keeps the original picture, letterboxed if needed
     shape?: 'fill' | '4:3';
 
+    // Start with the title screen, as the original does. Without it,
+    // Johnny's straight on the island
+    intro?: boolean;
+
     // The control bar: pause, next scene, sound, full screen and the day of
     // the story
     controls?: boolean;
@@ -180,6 +184,7 @@ export async function createPlayer(container: HTMLElement, options: PlayerOption
         aspect: () => shape === 'fill'
             ? { width: container.clientWidth, height: container.clientHeight }
             : { width: 4, height: 3 },
+        intro: options.intro ?? true,
         onNowPlaying: np => {
             const now = { ...np, title: describeScene(np) };
             if (captionEl)

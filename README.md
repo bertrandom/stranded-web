@@ -29,6 +29,7 @@ Then, from a page's project, add it as a dependency (eg. `"stranded-web": "file:
 | --- | --- | --- |
 | `data` | | URL of the data folder, relative to the page |
 | `shape` | `'fill'` | `'fill'` widens the picture to the element's shape (up to 4:1) and covers it. `'4:3'` keeps the original picture, letterboxed if needed |
+| `intro` | `true` | Start with the title screen, as the original does. With `false`, Johnny's straight on the island |
 | `controls` | `true` | A control bar: pause, next scene, sound, full screen, and the day of the story |
 | `caption` | `true` | What's playing, eg. "Day 3 · Fishing", in the control bar |
 | `keyboard` | `true` | Keys while the player has the focus: Space pauses, Return steps a frame while paused, N skips to the next scene, M toggles max speed, F goes full screen |
