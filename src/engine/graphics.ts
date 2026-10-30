@@ -125,6 +125,27 @@ export function grNewLayer() {
 }
 
 
+// In a widened scene, a zone reaching the edge of the 640x480 scene is
+// extended to the edge of the widened one. Eg. the tanker's hull in
+// GJVIS6.TTM, which is drawn as rectangles and fills the whole width of the
+// scene once the prow is gone, would otherwise end in the middle of the ocean
+function widenZone(x: number, width: number): [number, number] {
+    // Zones already in the margins, eg. the fade outs' strips, are left as is
+    if (!wideScene || x + width <= 0 || x >= SCREEN_WIDTH)
+        return [x, width];
+
+    if (x <= 0) {
+        width += x + gr.marginX;
+        x = -gr.marginX;
+    }
+
+    if (x + width >= SCREEN_WIDTH)
+        width = SCREEN_WIDTH + gr.marginX - x;
+
+    return [x, width];
+}
+
+
 export function grSetClipZone(sfc: Surface, x1: number, y1: number, x2: number, y2: number) {
     // In a widened scene, a zone reaching the edge of the 640x480 scene
     // reaches the edge of the widened one, so that sprites aren't cut off
@@ -142,6 +163,8 @@ export function grSetClipZone(sfc: Surface, x1: number, y1: number, x2: number, 
 
 
 export function grCopyZoneToBg(sfc: Surface, x: number, y: number, width: number, height: number) {
+    [x, width] = widenZone(toS16(x), width);
+
     x = toS16(x + gr.dx + gr.marginX);
     y = toS16(y + gr.dy);
 
@@ -208,6 +231,8 @@ export function grDrawLine(sfc: Surface, x1: number, y1: number, x2: number, y2:
 
 
 export function grDrawRect(sfc: Surface, x: number, y: number, width: number, height: number, colorNo: number) {
+    [x, width] = widenZone(x, width);
+
     sfc.fillRect({ x: x + gr.dx + gr.marginX, y: y + gr.dy, w: width, h: height }, color(colorNo));
 }
 
